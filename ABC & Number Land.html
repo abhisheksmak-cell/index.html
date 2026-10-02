@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABC & Number Land</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff1c9;--ink:#2b2350;--card:#fff;--pink:#ff6f91;--teal:#22b8a0;--sun:#ffc233;--purple:#6c5ce7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#261f52;--ink:#fff1c9;--card:#3b3377}}
+:root[data-theme="dark"]{--bg:#261f52;--ink:#fff1c9;--card:#3b3377}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Fredoka,"Trebuchet MS",system-ui,sans-serif;font-weight:500;overflow-x:hidden}
+#app{max-width:560px;margin:0 auto;min-height:100%;padding:14px 16px 28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:4px solid var(--purple);outline-offset:3px}
+.top{width:100%;display:flex;align-items:center;gap:10px}
+.back{background:var(--card);border-radius:999px;padding:10px 18px;font-size:18px;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.dots{margin-left:auto;font-size:22px;letter-spacing:2px}
+h1{font-size:clamp(36px,11vw,56px);line-height:1;margin:6px 0;text-align:center;font-weight:700}
+h1 span:nth-child(1){color:var(--pink)}h1 span:nth-child(2){color:var(--teal)}h1 span:nth-child(3){color:var(--purple)}
+h2{font-size:30px;margin:4px 0;text-align:center}
+.mascot{font-size:96px;animation:bob 1.6s ease-in-out infinite;line-height:1}
+.bubble{background:var(--card);border-radius:22px;padding:10px 18px;font-size:20px;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.big{width:100%;border-radius:28px;padding:20px;font-size:30px;font-weight:700;color:#fff;box-shadow:0 7px 0 rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;gap:14px}
+.big small{font-size:34px;letter-spacing:3px}
+.big:active,.opt:active,.lvl:active{transform:translateY(4px);box-shadow:none}
+.pink{background:var(--pink)}.teal{background:var(--teal)}.sun{background:var(--sun);color:#2b2350}.purple{background:var(--purple)}
+.row{display:flex;gap:12px;width:100%}.row .big{font-size:24px}
+.lvls{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.lvl{background:var(--card);border-radius:24px;padding:16px 10px;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.15);min-height:120px;font-size:18px}
+.lvl b{display:block;font-size:34px}.lvl[disabled]{opacity:.5;cursor:not-allowed}
+.stage{background:var(--card);border-radius:28px;padding:16px;width:100%;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.12)}
+.letter{font-size:130px;line-height:1;font-weight:700;color:var(--pink)}
+.q{font-size:24px;margin:4px 0 8px}
+.objs{font-size:34px;line-height:1.25;word-break:break-all}.objs.sm{font-size:26px}
+.objs i{font-style:normal;display:inline-block;transition:opacity .8s,transform .8s}
+.objs i.gone{opacity:.12;transform:scale(.5) rotate(20deg)}
+.bignum{font-size:100px;line-height:1;font-weight:700;color:var(--purple)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opt{background:var(--card);border-radius:24px;min-height:110px;padding:8px;font-size:56px;box-shadow:0 6px 0 rgba(0,0,0,.15);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.opt.grp{font-size:20px;line-height:1.2;word-break:break-all}
+.opt.num{font-size:60px;font-weight:700;color:var(--purple)}
+.opt.shake{animation:shake .45s}.opt.ok{background:#b8f2c6;color:#1a4d2a}
+.fb{min-height:64px;font-size:30px;font-weight:700;text-align:center}
+.fb em{color:var(--pink);font-style:normal;font-size:40px}
+.stars{font-size:64px;letter-spacing:6px}
+.col{display:flex;flex-direction:column;gap:12px;width:100%}
+.pop{position:fixed;font-size:30px;pointer-events:none;animation:rise 1.4s ease-out forwards}
+@keyframes bob{50%{transform:translateY(-12px) rotate(4deg)}}
+@keyframes shake{20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+@keyframes rise{from{opacity:1;transform:translateY(0) scale(.6)}to{opacity:0;transform:translateY(-220px) scale(1.4) rotate(40deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body><div id="app"></div>
+<script>
+const W=[["A","🍎","Apple"],["B","⚽","Ball"],["C","🐱","Cat"],["D","🐶","Dog"],["E","🐘","Elephant"],["F","🐟","Fish"],["G","🍇","Grapes"],["H","🏠","House"],["I","🍦","Ice cream"],["J","🧃","Juice"],["K","🪁","Kite"],["L","🦁","Lion"],["M","🐒","Monkey"],["N","👃","Nose"],["O","🐙","Octopus"],["P","🍕","Pizza"],["Q","👑","Queen"],["R","🌈","Rainbow"],["S","☀️","Sun"],["T","🐢","Turtle"],["U","☂️","Umbrella"],["V","🎻","Violin"],["W","🍉","Watermelon"],["X","🦴","X-ray"],["Y","🪀","Yo-yo"],["Z","🦓","Zebra"]];
+const AG=[[0,5],[5,10],[10,15],[15,20],[20,26]];
+const AN=["A–E","F–J","K–O","P–T","U–Z"];
+const H=[["अ","🍎","अनार"],["आ","🥭","आम"],["उ","🦉","उल्लू"],["ऐ","👓","ऐनक"],["ऊ","🐪","ऊँट"],["क","🪷","कमल"],["ख","🐰","खरगोश"],["ग","🐄","गाय"],["घ","🏠","घर"],["च","🥄","चम्मच"],["छ","☂️","छाता"],["ज","🚢","जहाज"],["ट","🍅","टमाटर"],["त","🍉","तरबूज"],["प","🪁","पतंग"],["फ","🌸","फूल"],["ब","🦆","बत्तख"],["भ","🐻","भालू"],["म","🐟","मछली"],["ह","🐘","हाथी"]];
+const HG=[[0,5],[5,10],[10,15],[15,20]],HN=["अ–ऊ","क–च","छ–प","फ–ह"];
+const D=()=>g=="hin"?{W:H,G:HG,N:HN}:{W,G:AG,N:AN};
+const NL=[{t:"Count the Objects",s:"1–10",m:"count",lo:1,hi:10},{t:"Match Number to Quantity",s:"1–10",m:"match",lo:1,hi:10},{t:"Count the Objects",s:"11–20",m:"count",lo:11,hi:20},{t:"Match Number to Quantity",s:"11–20",m:"match",lo:11,hi:20},{t:"Simple Addition",s:"sums to 10",m:"add"},{t:"Simple Subtraction",s:"within 10",m:"sub"}];
+const OB=[["🍎","apples"],["⭐","stars"],["⚽","balls"],["🐥","chicks"],["🐠","fish"],["🎈","balloons"]];
+let S={abc:[0,0,0,0,0],num:[0,0,0,0,0,0],hin:[0,0,0,0]},g,lv,R=[],ri=0,first=0,missed=false,locked=false,timer;
+try{const x=JSON.parse(localStorage.getItem("abcnum"));if(x&&x.abc&&x.num)S=x}catch(e){}
+if(!S.hin)S.hin=[0,0,0,0];
+const save=()=>{try{localStorage.setItem("abcnum",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),app=$("#app");
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const star=n=>"⭐".repeat(n)+"☆".repeat(3-n);
+const open=(g,i)=>i==0||S[g][i-1]>=2;
+let ac;
+function tone(f,d,t="sine",at=0){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),v=ac.createGain();o.type=t;o.frequency.value=f;o.connect(v);v.connect(ac.destination);const s=ac.currentTime+at;v.gain.setValueAtTime(.18,s);v.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+const good=()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",i*.1));
+const bad=()=>{tone(300,.18,"sine");tone(240,.25,"sine",.15)};
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=g=="hin"?"hi-IN":"en-US";u.rate=.8;u.pitch=1.2;speechSynthesis.speak(u)}catch(e){}}
+function confetti(){const e=["⭐","🎉","✨","🌟","🎈"];for(let i=0;i<14;i++){const p=document.createElement("div");p.className="pop";p.textContent=e[i%5];p.style.left=rnd(5,90)+"%";p.style.top=rnd(35,80)+"%";p.style.animationDelay=(i*.04)+"s";document.body.appendChild(p);setTimeout(()=>p.remove(),1800)}}
+function show(h){clearTimeout(timer);app.innerHTML=h;window.scrollTo(0,0)}
+const back=(f="hub()",l="🏠 Home")=>`<div class="top"><button class="back" onclick="${f}">${l}</button></div>`;
+
+function hub(){
+  const a=S.abc.reduce((x,y)=>x+y,0),n=S.num.reduce((x,y)=>x+y,0);
+  show(`<h1><span>ABC</span> &amp; <span>Number</span> <span>Land</span></h1>
+  <div class="mascot" aria-hidden="true">🐻</div><div class="bubble">Hi, I'm Bo! Let's play!</div>
+  <div class="col"><button class="big pink" onclick="start('abc')"><small>ABC</small>ABC Adventure</button>
+  <button class="big teal" onclick="start('num')"><small>123</small>Number Land</button>
+  <button class="big purple" onclick="start('hin')"><small>अ आ</small>हिंदी वर्णमाला</button>
+  <button class="big sun" onclick="prog()">⭐ Progress: ${a+n+S.hin.reduce((x,y)=>x+y,0)}</button></div>`);
+}
+function prog(){
+  const a=S.abc.reduce((x,y)=>x+y,0),n=S.num.reduce((x,y)=>x+y,0),h=S.hin.reduce((x,y)=>x+y,0),t=a+n+h;
+  const b=t>=30?["🏆","Super Learner"]:t>=15?["🥇","Learning Star"]:t>=5?["🥈","Little Explorer"]:["🌱","New Learner"];
+  show(`${back()}<h2>My Stars</h2><div class="mascot" style="font-size:80px">${b[0]}</div>
+  <div class="bubble">${b[1]}</div>
+  <div class="stage"><div class="q">ABC Stars: <b>${a}</b> / 15</div><div class="q">Number Stars: <b>${n}</b> / 18</div><div class="q">Hindi Stars: <b>${h}</b> / 12</div><div class="q">Total: <b>${t}</b> ⭐</div></div>`);
+}
+function start(x){
+  g=x;const T={abc:["ABC Adventure","🐻","Let's learn the ABCs!","pink"],hin:["हिंदी वर्णमाला","🦉","आओ हिंदी सीखें!","purple"],num:["Number Land","🦊","Let's play with numbers!","teal"]}[x];
+  show(`${back()}<h2>${T[0]}</h2><div class="mascot">${T[1]}</div>
+  <div class="bubble">${T[2]}</div>
+  <div class="col"><button class="big ${T[3]}" onclick="playNext()">▶ Play</button>
+  <button class="big sun" onclick="levels()">Choose Level</button></div>`);
+  say(T[2]);
+}
+function levels(){
+  const L=g!="num",n=g=="num"?6:g=="hin"?4:5;let h="";
+  for(let i=0;i<n;i++){const o=open(g,i);
+    h+=`<button class="lvl" ${o?`onclick="play(${i})"`:"disabled"}><b>${o?i+1:"🔒"}</b>${L?D().N[i]:NL[i].t+"<br>"+NL[i].s}<div>${o?star(S[g][i]):""}</div></button>`}
+  show(`${back("start(g)","⬅ Back")}<h2>Choose Level</h2><div class="lvls">${h}</div>`);
+}
+function playNext(){let i=0;while(i<(g=="num"?5:g=="hin"?3:4)&&open(g,i+1)&&S[g][i]>=2)i++;play(i)}
+
+function nums(c,max,lo){const s=new Set([c]);let k=0;while(s.size<3&&k++<60){const v=c+rnd(-3,3);if(v>=Math.max(0,lo)&&v<=max)s.add(v)}return shuf([...s])}
+function build(){
+  R=[];
+  if(g!="num"){
+    const [a,b]=D().G[lv];shuf(D().W.slice(a,b)).slice(0,5).forEach(w=>{
+      const d=shuf(D().W.filter(x=>x[0]!=w[0])).slice(0,3);
+      R.push({type:"abc",w,opts:shuf([w,...d]).map(x=>({v:x[0],h:x[1],l:x[2]})),ans:w[0]})});
+  }else{
+    const L=NL[lv];
+    for(let i=0;i<5;i++){
+      const o=OB[rnd(0,OB.length-1)];
+      if(L.m=="count"){const n=rnd(L.lo,L.hi);R.push({type:"count",n,o,opts:nums(n,L.hi+2,1).map(v=>({v,h:v,c:"num"})),ans:n})}
+      else if(L.m=="match"){const n=rnd(L.lo,L.hi);const s=new Set([n]);while(s.size<3){const v=n+rnd(-3,3);if(v>=1&&v<=L.hi+2)s.add(v)}
+        R.push({type:"match",n,o,opts:shuf([...s]).map(v=>({v,h:o[0].repeat(v),c:"grp"})),ans:n})}
+      else if(L.m=="add"){const a=rnd(1,6),b=rnd(1,Math.min(6,10-a));R.push({type:"add",a,b,o,opts:nums(a+b,10,0).map(v=>({v,h:v,c:"num"})),ans:a+b})}
+      else{const a=rnd(3,10),b=rnd(1,a-1);R.push({type:"sub",a,b,o,opts:nums(a-b,10,0).map(v=>({v,h:v,c:"num"})),ans:a-b})}
+    }
+  }
+}
+function play(i){lv=i;ri=0;first=0;build();round()}
+function round(){
+  const r=R[ri];missed=false;locked=false;let body="",q="";
+  if(r.type=="abc"){body=`<div class="letter">${r.w[0]}</div>`;q=g=="hin"?"किस चित्र का नाम इस अक्षर से शुरू होता है?":"Which one starts with this letter?";setTimeout(()=>say(g=="hin"?`${r.w[0]} से ${r.w[2]}`:`${r.w[0]}. ${r.w[0]} says ${r.w[2]}.`),300)}
+  else if(r.type=="count"){body=`<div class="objs ${r.n>10?"sm":""}">${r.o[0].repeat(r.n)}</div>`;q=`How many ${r.o[1]} do you see?`;setTimeout(()=>say(q),300)}
+  else if(r.type=="match"){body=`<div class="bignum">${r.n}</div>`;q=`Which group has ${r.n} ${r.o[1]}?`;setTimeout(()=>say(q),300)}
+  else if(r.type=="add"){body=`<div class="objs">${r.o[0].repeat(r.a)} <b>+</b> ${r.o[0].repeat(r.b)}</div>`;q=`How many ${r.o[1]} in total?`;setTimeout(()=>say(q),300)}
+  else{body=`<div class="objs">${[...Array(r.a)].map((_,k)=>`<i class="${k>=r.a-r.b?"x":""}">${r.o[0]}</i>`).join("")}</div>`;q=`How many ${r.o[1]} are left?`;setTimeout(()=>{document.querySelectorAll(".x").forEach(e=>e.classList.add("gone"));say(q)},1100)}
+  const dots=R.map((_,k)=>k<ri?"●":"○").join(" ");
+  show(`<div class="top"><button class="back" onclick="levels()">🏠 Levels</button><span class="dots">${dots}</span></div>
+  <div class="stage">${body}<div class="q">${q}</div></div>
+  <div class="fb" id="fb"></div>
+  <div class="opts">${r.opts.map((o,k)=>`<button class="opt ${o.c||""}" onclick="pick(${k},this)" aria-label="${o.l||o.v}">${o.h}${o.l?`<span style="font-size:18px">${o.l}</span>`:""}</button>`).join("")}</div>`);
+}
+function pick(k,el){
+  if(locked)return;const r=R[ri],o=r.opts[k];
+  if(o.v!==r.ans){missed=true;bad();el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake");$("#fb").textContent="Try again! 💪";return}
+  locked=true;if(!missed)first++;el.classList.add("ok");good();confetti();
+  let f="";
+  if(r.type=="abc"){const m=r.w[2].match(/^.[\u093A-\u094F\u0901-\u0903]*/u)[0];f=`<em>${m}</em>${r.w[2].slice(m.length)} ${r.w[1]}`;say(g=="hin"?`${r.w[0]} से ${r.w[2]}`:`${r.w[2]}! ${r.w[0]} is for ${r.w[2]}`)}
+  else if(r.type=="count"||r.type=="match"){f=`${r.ans} ${r.o[1]}! ${r.o[0]}`;say(`${r.ans} ${r.o[1]}!`)}
+  else if(r.type=="add"){f=`${r.a} + ${r.b} = ${r.ans} ${r.o[0]}`;say(`${r.a} plus ${r.b} equals ${r.ans}`)}
+  else{f=`${r.a} − ${r.b} = ${r.ans} ${r.o[0]}`;say(`${r.a} minus ${r.b} equals ${r.ans}`)}
+  $("#fb").innerHTML="🎉 "+f;
+  timer=setTimeout(()=>{ri++;ri<R.length?round():done()},2200);
+}
+function done(){
+  const s=first>=5?3:first>=3?2:1;
+  if(s>S[g][lv])S[g][lv]=s;save();
+  const max=(g=="num"?6:g=="hin"?4:5)-1,nx=lv<max&&open(g,lv+1);
+  const msg=s==3?(g=="num"?"You're a math star!":g=="hin"?"शाबाश! बहुत बढ़िया!":"Amazing! You're an ABC star!"):s==2?"Great job!":"Good try! Play again for more stars!";
+  confetti();good();say(msg);
+  show(`<h2>${{abc:"ABC",hin:"Hindi",num:"Number"}[g]} Level Complete!</h2><div class="mascot">🐻</div>
+  <div class="stars" aria-label="${s} stars">${star(s)}</div><div class="bubble">${msg}</div>
+  <div class="col">${nx?`<button class="big teal" onclick="play(${lv+1})">Next Level ➡</button>`:""}
+  <button class="big sun" onclick="play(${lv})">🔁 Replay</button>
+  <button class="big purple" onclick="hub()">🏠 Back to Hub</button></div>`);
+}
+hub();
+</script></body></html>
